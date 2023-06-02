@@ -3,7 +3,9 @@ class BooksController < ApplicationController
   before_action :is_matching_login_user, only: [:edit, :update]
   
   def index
-    @books = Book.all
+    @books = Book.includes(:favorited_users).
+      sort_by {|x|
+        x.favorited_users.includes(:favorites).size}.reverse
     @book = Book.new
   end
 
