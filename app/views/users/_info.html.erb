@@ -34,10 +34,10 @@
 <div class="row">
   <% unless user.id == current_user.id %>
     <% if (current_user.following? user) && (user.following? current_user) %>
-      <% if isRoom == true %>
-        <%= link_to 'DM', room_path(roomId), class: "btn btn-outline-primary btn-block" %>
+      <% if is_room == true %>
+        <%= link_to 'DM', room_path(room_id), class: "btn btn-outline-primary btn-block" %>
       <% else %>
-        <%= form_with model: room do |f| %>
+        <%= form_for room do |f| %>
           <%= fields_for entry do |e| %>
             <%= e.hidden_field :user_id, value: user.id %>
           <% end %>

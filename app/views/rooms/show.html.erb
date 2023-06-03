@@ -1,0 +1,36 @@
+<div class="left-button">
+  <%= link_to 'back', users_path, class: "edit-link" %>
+</div>
+<% @entries.each do |e| %>
+  <div class="user-name">
+    <strong>
+      <%= link_to user_path(e.user_id) do %>
+        <%= image_tag e.user.profile_image %></br>
+        <%= e.user.name %>
+      <% end %>
+    </strong>
+  </div>
+<% end %>
+<div class="chats">
+  <div class="chat">
+    <% if @messages.present? %>
+      <% @messages.each do |message| %>
+        <div class="chat-box">
+          <div class="chat-face">
+            <%= image_tag message.user.profile_image %>
+          </div>
+          <div class="chat-hukidashi">
+            <%= message.content %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="posts">
+    <%= form_with model: @message do |f| %>
+      <%= f.text_field :content, class: "form-control" %>
+      <%= f.hidden_field :room_id, velue: @room.id %>
+      <%= f.submit "send", class: "btn btn-outline-secondary btn-sm" %>
+    <% end %>
+  </div>
+</div>
