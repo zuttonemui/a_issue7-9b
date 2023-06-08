@@ -22,28 +22,12 @@
     </th>
   </tr>
 </table>
-<div class="row mb-1">
+<div class="row">
   <% if current_user == user %>
     <%= link_to edit_user_path(user.id), class: "btn btn-outline-secondary btn-block" do %>
       <i class="fas fa-user-cog"></i>
     <% end %>
   <% else %>
     <%= render 'relationships/btn', user: user %>
-  <% end %>
-</div>
-<div class="row">
-  <% unless user.id == current_user.id %>
-    <% if (current_user.following? user) && (user.following? current_user) %>
-      <% if is_room == true %>
-        <%= link_to 'DM', room_path(room_id), class: "btn btn-outline-primary btn-block" %>
-      <% else %>
-        <%= form_for room do |f| %>
-          <%= fields_for entry do |e| %>
-            <%= e.hidden_field :user_id, value: user.id %>
-          <% end %>
-          <%= f.submit 'start chat', class: "btn btn-outline-primary btn-block" %>
-        <% end %>
-      <% end %>
-    <% end %>
   <% end %>
 </div>
