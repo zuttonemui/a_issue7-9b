@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  root to: 'homes#top'
-  get 'home/about' => 'homes#about', as: 'about'
+  root to: "homes#top"
+  get "home/about" => "homes#about", as: "about"
   devise_for :users
   devise_scope :user do
-    post 'users/guest_sign_in', to: 'users/sessions#guest_sign_in'
+    post "users/guest_sign_in", to: "users/sessions#guest_sign_in"
   end
   resources :books, only: [:index, :show, :edit, :create, :update, :destroy] do
     resources :book_comments, only: [:create, :destroy]
@@ -11,9 +11,9 @@ Rails.application.routes.draw do
   end
   resources :users, only: [:index, :show, :edit, :update] do
     resource :relationships, only: [:create, :destroy]
-    get 'folllowings' => 'relationships#followings', as: 'followings'
-    get 'folllowers' => 'relationships#followers', as: 'followers'
-    get 'search' => 'users#search'
+    get "folllowings" => "relationships#followings", as: "followings"
+    get "folllowers" => "relationships#followers", as: "followers"
+    get "search" => "users#search"
   end
-  get 'search' => 'searches#search'
+  get "search" => "searches#search"
 end

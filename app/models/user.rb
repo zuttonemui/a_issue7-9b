@@ -3,10 +3,10 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  
+
   validates :name, uniqueness: true, length: { in: 2 .. 20 }
   validates :introduction, length: { maximum: 50 }
-  
+
   has_many :books, dependent: :destroy
   has_many :book_comments, dependent: :destroy
   has_many :favorites, dependent: :destroy
@@ -14,17 +14,17 @@ class User < ApplicationRecord
   has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
   has_many :followings, through: :relationships, source: :followed
   has_many :followers, through: :reverse_of_relationships, source: :follower
-  
+
   has_one_attached :profile_image
-  
+
   def get_profile_image(width, height)
     unless profile_image.attached?
-      file_path = Rails.root.join('app/assets/images/default-image.jpg')
-      profile_image.attach(io: File.open(file_path), filename: 'default-image.jpg', content_type: 'image/jpeg')
+      file_path = Rails.root.join("app/assets/images/default-image.jpg")
+      profile_image.attach(io: File.open(file_path), filename: "default-image.jpg", content_type: "image/jpeg")
     end
     profile_image.variant(resize_to_limit: [width, height]).processed
   end
-  
+
   def follow(user_id)
     relationships.create(followed_id: user_id)
   end
@@ -36,7 +36,7 @@ class User < ApplicationRecord
   def following?(user)
     followings.include?(user)
   end
-  
+
   def self.looks(search, word)
     if search == "perfect_match"
       @user = User.where("name LIKE?", "#{word}")
@@ -48,6 +48,12 @@ class User < ApplicationRecord
       @user = User.where("name LIKE?", "%#{word}%")
     else
       @user = User.all
+    end
+  end
+
+  def self.guest
+    find_or_create_by!(name: "guestuser", email: "guest@example.com") do |user|
+      user.password = SecureRandom.urlsafe_base64
     end
   end
 end

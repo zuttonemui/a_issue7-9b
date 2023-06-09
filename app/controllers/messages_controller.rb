@@ -1,11 +1,11 @@
 class MessagesController < ApplicationController
-    before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!, only: [:create]
 
   def show
     @user = User.find(params[:id])
     rooms = current_user.user_rooms.pluck(:room_id)
     user_rooms = UserRoom.find_by(user_id: @user.id, room_id: rooms)
-    
+
     unless user_rooms.nil?
       @room = user_rooms.room
     else
@@ -14,9 +14,8 @@ class MessagesController < ApplicationController
       UserRoom.create(user_id: current_user.id, room_id: @room.id)
       UserRoom.create(user_id: @user.id, room_id: @room.id)
     end
-    
+
     @messages = @room.messages
-    
   end
 
   def create
@@ -25,6 +24,6 @@ class MessagesController < ApplicationController
     else
       flash[:alert] = "メッセージ送信に失敗しました。"
     end
-　　redirect_to "/rooms/#{@message.room_id}"
+    　　redirect_to "/rooms/#{@message.room_id}"
   end
 end
